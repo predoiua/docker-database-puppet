@@ -6,6 +6,6 @@ forge 'http://forge.puppetlabs.com'
 # modules from the Puppet Forge
 mod 'erwbgy/limits'
 mod 'hajee/easy_type'
-mod 'biemond/oradb'
+mod 'biemond/oradb', '1.0.32'
 mod 'hajee/oracle'
 
