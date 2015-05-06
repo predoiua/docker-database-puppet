@@ -1,23 +1,17 @@
-## Oracle Database 12.1.0.2 ( 12c ) Standard Edition Docker image
+## Oracle Database 
 
-it will download a minimal CentOS 6 image, Puppet 3.7 and all it dependencies
-
-You can also use use the official Oracle Linux 6.6 docker image, just do the following
-- wget http://public-yum.oracle.com/docker-images/OracleLinux/OL6/oraclelinux-6.6.tar.xz
-- docker load -i oraclelinux-6.6.tar.xz
-- docker run --rm -i -t oraclelinux:6.6 /bin/bash
-- Change the first line of the Dockerfile to FROM oraclelinux:6.6
+It will download a minimal CentOS 6 image, Puppet 3.7 and all it dependencies
 
 The Docker image will be big, and off course this is not supported by Oracle and like always check your license to use this software
 
 Configures Puppet and use librarian-puppet to download all the modules from the Puppet Forge
 
+Changes vs original :
+- kit will be outside VM
+- no db - only software. db will be created in a separat step.
+
 ### Result
-- Oracle Database Standard Edition 12.1.0.2
-- Service name = orcl.example.com
-- username sys or system
-- All passwords = Welcome01
-- Demo schemas
+- Oracle Database software on CentOS 6. ( no systemd ;) )
 
 Optional, you can add your own DB things, just change the puppet site.pp manifest
 - Add your own Tablespaces
@@ -27,13 +21,15 @@ Optional, you can add your own DB things, just change the puppet site.pp manifes
 - execute some SQL
 
 ### Software
-Download the following [software 12.1.0.2](http://www.oracle.com/technetwork/database/enterprise-edition/downloads/database12c-linux-download-1959253.html) from Oracle and Agree to the license
+Download Oracle DB for CentOS 6 64.
 - 12.1.0.2 file 1 & 2 ( linuxamd64_12c_database_1of2.zip )
 
-Add them to this docker folder
-
-### Build image (~ 13GB)
-docker build -t oracle/database12102 .
+### Build image 
+1. Clone git repo.
+2. docker build -t myora .
+This will create a image called "myora"
+3. start image with ora kits provided as volume
+4. install oracle software. save it as image
 
 Maybe after the build you should compress it first, see the compress section for more info
 
@@ -52,14 +48,3 @@ docker run -i -t -p 1521:1521 oracle/database12102:latest /bin/bash
 - cat database12102.tar | docker import - database12102
 - docker run -i -t -p 1521:1521 database12102:latest /bin/bash
 - /startup.sh
-
-### Boot2docker, MAC OSX
-Probably you will run out of space
-- Resize boot2docker image https://docs.docker.com/articles/b2d_volume_resize/
-
-VirtualBox forward rules
-- VBoxManage controlvm boot2docker-vm natpf1 "database,tcp,,1521,,1521"
-
-Check the ipaddress
-- boot2docker ip
-
